@@ -20,33 +20,32 @@ class ReportController extends Controller
      */
     public function listReports(Request $request)
     {
-        $apiUrl = 'https://spaceflightnewsapi.net/api/v2';
+
+        // $apiUrl = 'https://spaceflightnewsapi.net/api/v2/';
+
+        $apiUrl = 'https://api.spaceflightnewsapi.net/v3/';
 
         $guzzle = new Client([
             'base_uri' => $apiUrl
         ]);
-        $rawResult = $guzzle->get('reports')->getBody();
+
+        $response = json_decode($guzzle->get('articles')->getBody()->getContents(), true);
 
         $filter = $request->get('filter');
-
-        $result = [];
-
-        for ($x = 0; $x <= sizeof($rawResult); $x++) {
-            Report::create([
-                'external_id' => $rawResult[$x]['id'],
-                'title' => $rawResult[$x]['title'],
-                'url' => $rawResult[$x]['url'],
-                'summary' => $rawResult[$x]['summary']
+        $data = array();
+        foreach ($response as $value) {
+            Report::FirstOrCreate([
+                'external_id' => $value['id'],
+                'title' => $value['title'],
+                'url' => $value['url'],
+                'summary' => $value['summary']
             ]);
-
-            if (strpos($rawResult[$x], $filter) == false) {
+            if (strpos(json_encode($value), $filter) === false) {
                 continue;
             }
-
-            $result[] = $rawResult[$x];
+            array_push($data, $value);
         }
-
-        return response()->json(['data' => $result]);
+        return response()->json(compact('data'));
     }
 
     /**
