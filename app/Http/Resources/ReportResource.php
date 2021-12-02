@@ -14,6 +14,9 @@ class ReportResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        //mudança pois o external_id não estava retornando correto
+        $reponse = parent::toArray($request);
+        $reponse['external_id'] = $request->external_id;
+        return $reponse;
     }
 }

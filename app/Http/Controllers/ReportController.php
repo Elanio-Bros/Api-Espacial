@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ReportResource;
 use App\Report;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -20,10 +21,9 @@ class ReportController extends Controller
      */
     public function listReports(Request $request)
     {
-
-        // $apiUrl = 'https://spaceflightnewsapi.net/api/v2/';
-
+        //atualização da url para nova API
         $apiUrl = 'https://api.spaceflightnewsapi.net/v3/';
+
 
         $guzzle = new Client([
             'base_uri' => $apiUrl
@@ -33,19 +33,22 @@ class ReportController extends Controller
 
         $filter = $request->get('filter');
         $data = array();
+        /*refatoração de codigo para melhor 
+        leitura e manutenção e atualização de registros já existentes*/
         foreach ($response as $value) {
-            Report::FirstOrCreate([
-                'external_id' => $value['id'],
-                'title' => $value['title'],
-                'url' => $value['url'],
-                'summary' => $value['summary']
+            $report = Report::firstOrNew([
+                'external_id' => $value['id']
             ]);
+            $report['title'] = $value['title'];
+            $report['url'] = $value['url'];
+            $report['summary'] = $value['summary'];
+            $report->save();
             if (strpos(json_encode($value), $filter) === false) {
                 continue;
             }
             array_push($data, $value);
         }
-        return response()->json(compact('data'));
+        return response()->json($data, 200);
     }
 
     /**
@@ -54,16 +57,26 @@ class ReportController extends Controller
      */
     public function createReport(Request $request)
     {
-        $report = Report::create([
-            'external_id' => $request->post('external_id'),
-            'title' => $request->post('title'),
-            'url' => $request->post('url'),
-            'summary' => $request->post('summary')
+        $request->validate([
+            'external_id' => ['required', 'integer'],
+            'title' => ['required', 'string'],
+            'url' => ['required', 'string'],
+            'summary' => ['required', 'string'],
         ]);
+        try {
+            $report = Report::create([
+                'external_id' => $request->post('external_id'),
+                'title' => $request->post('title'),
+                'url' => $request->post('url'),
+                'summary' => $request->post('summary')
+            ]);
+        } catch (Exception $e) {
+            if ($e->errorInfo[1] == 1062) {
+                return response()->json(['error' => 'external_id duplicado'], 400);
+            }
+        }
 
-        return (new ReportResource($report))
-            ->response()
-            ->setStatusCode(201);
+        return (new ReportResource($report))->response()->setStatusCode(201);
     }
 
     /**
@@ -71,8 +84,15 @@ class ReportController extends Controller
      *
      * @param $reportId
      */
+
     public function deleteReport($reportId)
     {
-        // Implementar esse endpoint.
+        $report = Report::find($reportId);
+        if ($report != null) {
+            $report->delete();
+            return response()->json(['result' => 'Value Delete'], 202);
+        } else {
+            return response()->json(['error' => 'Value Not Found'], 404);
+        }
     }
 }
