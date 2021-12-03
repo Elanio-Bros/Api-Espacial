@@ -24,4 +24,4 @@ Depois digite os commandos:
 ## Lógica
 
 &nbsp;
-A API tem como função acessar dados de outra API para pegar informações e ordenalas e organizalas
+A API tem como função acessar dados de outra API para pegar informações salvar
