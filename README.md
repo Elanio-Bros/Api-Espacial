@@ -14,10 +14,10 @@ Esse requisitos são importantes pra a configuração do **Banco De Dados**
 
 &nbsp;
 Depois digite os commandos:
-1. `composer install`-> para instalar as dependecias
-2. `php artisan key:generate`-> para gerar uma chave de cripitografia.
-3. `php artisan migrate` para criar todas as migrações e tabelas
-4. `php artisan serve` para iniciar o servidor
+1. `composer install`-> para instalar as dependências
+2. `php artisan key:generate`-> para gerar uma chave de criptografia
+3. `php artisan migrate`-> para criar todas as migrações e tabelas
+4. `php artisan serve`-> para iniciar o servidor
 
 
 &nbsp;
