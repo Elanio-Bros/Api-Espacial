@@ -2,7 +2,7 @@
 
 &nbsp;
 ## Configurações da Aplicação
-Primeiro crie um arquivo ou fazer um clone do .env [`exemplo do arquivo env`](https://github.com/Elanio-Bros/jobs-dev-n3/blob/main/.env.example) os requisitos para mudança são:
+Primeiro crie um arquivo ou faça um clone do .env [`exemplo do arquivo env`](https://github.com/Elanio-Bros/jobs-dev-n3/blob/main/.env.example) os requisitos para mudança são:
 1. DB_HOST-> IP
 2. DB_PORT-> Porta
 3. DB_DATABASE -> Nome do Banco
