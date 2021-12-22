@@ -1,4 +1,8 @@
-# StarGrid – Teste Desevolvedor(a) Backend N3
+&nbsp;
+## Lógica
+
+&nbsp;
+A API tem como função acessar dados de outra API para pegar informações salvar
 
 &nbsp;
 ## Configurações da Aplicação
@@ -18,10 +22,3 @@ Depois digite os commandos:
 2. `php artisan key:generate`-> para gerar uma chave de criptografia
 3. `php artisan migrate`-> para criar todas as migrações e tabelas
 4. `php artisan serve`-> para iniciar o servidor
-
-
-&nbsp;
-## Lógica
-
-&nbsp;
-A API tem como função acessar dados de outra API para pegar informações salvar
